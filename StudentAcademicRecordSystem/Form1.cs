@@ -22,7 +22,7 @@ namespace StudentAcademicRecordSystem
             dgvStudents.ScrollBars = ScrollBars.Both;
         }
 
-        // Designer-linked handlers.
+        // Designer linked handlers.
         private void label2_Click(object sender, EventArgs e) { }
         private void label1_Click(object sender, EventArgs e) { }
         private void label1_Click_1(object sender, EventArgs e) { }
@@ -30,7 +30,7 @@ namespace StudentAcademicRecordSystem
         private void label1_Click_3(object sender, EventArgs e) { }
         private void txtGPA_TextChanged(object sender, EventArgs e) { }
 
-        // Calculate GPA for one unit.
+        // Calculate GPA for a one unit.
         private double CalculateGPA(double mark)
         {
             if (mark >= 80)
@@ -166,7 +166,7 @@ namespace StudentAcademicRecordSystem
                     return;
                 }
 
-                // Refresh the correct saved results for this student.
+                // Refresh saved academic results for this student.
                 double overallGPA =
                     CalculateOverallGPA(studentId);
 
@@ -286,6 +286,21 @@ namespace StudentAcademicRecordSystem
 
                     return;
                 }
+
+                // Refresh correct saved results before any further validation.
+                double existingOverallGPA =
+                    CalculateOverallGPA(studentId);
+
+                double existingWAM =
+                    CalculateWAM(studentId);
+
+                txtGPA.Text =
+                    existingOverallGPA.ToString("0.00");
+
+                txtWAM.Text =
+                    existingWAM.ToString("0.00");
+
+                DisplayStudentStatus(existingWAM);
             }
 
             // Stop duplicate units for the same student.
