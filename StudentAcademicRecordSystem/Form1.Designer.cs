@@ -53,7 +53,9 @@
             Unit = new DataGridViewTextBoxColumn();
             Marks = new DataGridViewTextBoxColumn();
             GPA = new DataGridViewTextBoxColumn();
-            WAM = new DataGridViewTextBoxColumn();
+            btnSearch = new Button();
+            lblStatus = new Label();
+            lblStudentStatus = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvStudents).BeginInit();
             SuspendLayout();
             // 
@@ -71,15 +73,16 @@
             // lblStudentID
             // 
             lblStudentID.AutoSize = true;
-            lblStudentID.Location = new Point(0, 58);
+            lblStudentID.Location = new Point(0, 79);
             lblStudentID.Name = "lblStudentID";
             lblStudentID.Size = new Size(100, 25);
             lblStudentID.TabIndex = 2;
             lblStudentID.Text = "Student ID:";
+            lblStudentID.Click += lblStudentID_Click;
             // 
             // txtStudentID
             // 
-            txtStudentID.Location = new Point(198, 58);
+            txtStudentID.Location = new Point(198, 79);
             txtStudentID.Name = "txtStudentID";
             txtStudentID.Size = new Size(150, 31);
             txtStudentID.TabIndex = 3;
@@ -87,7 +90,7 @@
             // lblStudentName
             // 
             lblStudentName.AutoSize = true;
-            lblStudentName.Location = new Point(0, 118);
+            lblStudentName.Location = new Point(0, 147);
             lblStudentName.Name = "lblStudentName";
             lblStudentName.Size = new Size(129, 25);
             lblStudentName.TabIndex = 4;
@@ -95,7 +98,7 @@
             // 
             // txtStudentName
             // 
-            txtStudentName.Location = new Point(198, 118);
+            txtStudentName.Location = new Point(198, 147);
             txtStudentName.Name = "txtStudentName";
             txtStudentName.Size = new Size(150, 31);
             txtStudentName.TabIndex = 5;
@@ -103,7 +106,7 @@
             // lblCourse
             // 
             lblCourse.AutoSize = true;
-            lblCourse.Location = new Point(0, 177);
+            lblCourse.Location = new Point(0, 213);
             lblCourse.Name = "lblCourse";
             lblCourse.Size = new Size(71, 25);
             lblCourse.TabIndex = 6;
@@ -112,7 +115,7 @@
             // 
             // txtCourse
             // 
-            txtCourse.Location = new Point(198, 186);
+            txtCourse.Location = new Point(198, 210);
             txtCourse.Name = "txtCourse";
             txtCourse.Size = new Size(150, 31);
             txtCourse.TabIndex = 7;
@@ -120,7 +123,7 @@
             // lblUnit
             // 
             lblUnit.AutoSize = true;
-            lblUnit.Location = new Point(0, 249);
+            lblUnit.Location = new Point(0, 275);
             lblUnit.Name = "lblUnit";
             lblUnit.Size = new Size(48, 25);
             lblUnit.TabIndex = 8;
@@ -128,7 +131,7 @@
             // 
             // txtUnit
             // 
-            txtUnit.Location = new Point(198, 258);
+            txtUnit.Location = new Point(198, 272);
             txtUnit.Name = "txtUnit";
             txtUnit.Size = new Size(150, 31);
             txtUnit.TabIndex = 9;
@@ -136,7 +139,7 @@
             // lblMarks
             // 
             lblMarks.AutoSize = true;
-            lblMarks.Location = new Point(0, 321);
+            lblMarks.Location = new Point(0, 343);
             lblMarks.Name = "lblMarks";
             lblMarks.Size = new Size(64, 25);
             lblMarks.TabIndex = 10;
@@ -145,7 +148,7 @@
             // 
             // txtMarks
             // 
-            txtMarks.Location = new Point(198, 318);
+            txtMarks.Location = new Point(198, 337);
             txtMarks.Name = "txtMarks";
             txtMarks.Size = new Size(150, 31);
             txtMarks.TabIndex = 11;
@@ -153,16 +156,16 @@
             // lblGPA
             // 
             lblGPA.AutoSize = true;
-            lblGPA.Location = new Point(0, 383);
+            lblGPA.Location = new Point(0, 430);
             lblGPA.Name = "lblGPA";
-            lblGPA.Size = new Size(49, 25);
+            lblGPA.Size = new Size(109, 25);
             lblGPA.TabIndex = 12;
-            lblGPA.Text = "GPA:";
+            lblGPA.Text = "Overall GPA:";
             lblGPA.Click += label1_Click_3;
             // 
             // txtGPA
             // 
-            txtGPA.Location = new Point(198, 383);
+            txtGPA.Location = new Point(198, 430);
             txtGPA.Name = "txtGPA";
             txtGPA.ReadOnly = true;
             txtGPA.Size = new Size(150, 31);
@@ -172,15 +175,15 @@
             // lblWAM
             // 
             lblWAM.AutoSize = true;
-            lblWAM.Location = new Point(0, 446);
+            lblWAM.Location = new Point(0, 495);
             lblWAM.Name = "lblWAM";
-            lblWAM.Size = new Size(60, 25);
+            lblWAM.Size = new Size(123, 25);
             lblWAM.TabIndex = 14;
-            lblWAM.Text = "WAM:";
+            lblWAM.Text = "Current WAM:";
             // 
             // txtWAM
             // 
-            txtWAM.Location = new Point(198, 446);
+            txtWAM.Location = new Point(198, 495);
             txtWAM.Name = "txtWAM";
             txtWAM.ReadOnly = true;
             txtWAM.Size = new Size(150, 31);
@@ -188,7 +191,7 @@
             // 
             // btnAddRecord
             // 
-            btnAddRecord.Location = new Point(24, 534);
+            btnAddRecord.Location = new Point(58, 650);
             btnAddRecord.Name = "btnAddRecord";
             btnAddRecord.Size = new Size(120, 34);
             btnAddRecord.TabIndex = 16;
@@ -198,7 +201,7 @@
             // 
             // btnCalculate
             // 
-            btnCalculate.Location = new Point(198, 534);
+            btnCalculate.Location = new Point(250, 650);
             btnCalculate.Name = "btnCalculate";
             btnCalculate.Size = new Size(112, 34);
             btnCalculate.TabIndex = 17;
@@ -208,7 +211,7 @@
             // 
             // btnClear
             // 
-            btnClear.Location = new Point(375, 534);
+            btnClear.Location = new Point(704, 650);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(112, 34);
             btnClear.TabIndex = 18;
@@ -219,12 +222,13 @@
             // dgvStudents
             // 
             dgvStudents.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvStudents.Columns.AddRange(new DataGridViewColumn[] { StudentID, StudentName, Course, Unit, Marks, GPA, WAM });
-            dgvStudents.Location = new Point(24, 600);
+            dgvStudents.Columns.AddRange(new DataGridViewColumn[] { StudentID, StudentName, Course, Unit, Marks, GPA });
+            dgvStudents.Location = new Point(38, 714);
             dgvStudents.Name = "dgvStudents";
             dgvStudents.RowHeadersWidth = 62;
-            dgvStudents.Size = new Size(1093, 115);
+            dgvStudents.Size = new Size(938, 375);
             dgvStudents.TabIndex = 19;
+            dgvStudents.CellContentClick += dgvStudents_CellContentClick;
             // 
             // StudentID
             // 
@@ -263,23 +267,47 @@
             // 
             // GPA
             // 
-            GPA.HeaderText = "GPA";
+            GPA.HeaderText = "Unit GPA";
             GPA.MinimumWidth = 8;
             GPA.Name = "GPA";
             GPA.Width = 150;
             // 
-            // WAM
+            // btnSearch
             // 
-            WAM.HeaderText = "WAM";
-            WAM.MinimumWidth = 8;
-            WAM.Name = "WAM";
-            WAM.Width = 150;
+            btnSearch.Location = new Point(445, 650);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(162, 34);
+            btnSearch.TabIndex = 20;
+            btnSearch.Text = "Search Student";
+            btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.Click += btnSearch_Click;
+            // 
+            // lblStatus
+            // 
+            lblStatus.AutoSize = true;
+            lblStatus.Location = new Point(0, 567);
+            lblStatus.Name = "lblStatus";
+            lblStatus.Size = new Size(130, 25);
+            lblStatus.TabIndex = 22;
+            lblStatus.Text = "Student Status:";
+            lblStatus.Click += lblStatus_Click;
+            // 
+            // lblStudentStatus
+            // 
+            lblStudentStatus.AutoSize = true;
+            lblStudentStatus.Location = new Point(200, 553);
+            lblStudentStatus.Name = "lblStudentStatus";
+            lblStudentStatus.Size = new Size(0, 25);
+            lblStudentStatus.TabIndex = 23;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1155, 755);
+            ClientSize = new Size(996, 1050);
+            Controls.Add(lblStudentStatus);
+            Controls.Add(lblStatus);
+            Controls.Add(btnSearch);
             Controls.Add(dgvStudents);
             Controls.Add(btnClear);
             Controls.Add(btnCalculate);
@@ -332,6 +360,8 @@
         private DataGridViewTextBoxColumn Unit;
         private DataGridViewTextBoxColumn Marks;
         private DataGridViewTextBoxColumn GPA;
-        private DataGridViewTextBoxColumn WAM;
+        private Button btnSearch;
+        private Label lblStatus;
+        private Label lblStudentStatus;
     }
 }
