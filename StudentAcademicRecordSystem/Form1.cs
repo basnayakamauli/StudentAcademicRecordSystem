@@ -13,6 +13,8 @@ namespace StudentAcademicRecordSystem
         public Form1()
         {
             InitializeComponent();
+
+            dgvStudents.MultiSelect = true;
         }
 
         // Designer-linked handlers.
@@ -318,7 +320,7 @@ namespace StudentAcademicRecordSystem
 
             DisplayStudentStatus(currentWAM);
 
-            // Highlight matching rows.
+            // Highlight all rows that belong to the searched student.
             dgvStudents.ClearSelection();
 
             DataGridViewRow? firstMatch = null;
@@ -338,7 +340,9 @@ namespace StudentAcademicRecordSystem
                     row.Selected = true;
 
                     if (firstMatch == null)
+                    {
                         firstMatch = row;
+                    }
                 }
             }
 
@@ -383,12 +387,10 @@ namespace StudentAcademicRecordSystem
 
         private void lblStudentID_Click(object sender, EventArgs e)
         {
-
         }
 
         private void lblStatus_Click(object sender, EventArgs e)
         {
-
         }
     }
 }
