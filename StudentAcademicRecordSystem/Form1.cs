@@ -110,6 +110,33 @@ namespace StudentAcademicRecordSystem
             {
                 double unitGPA = CalculateGPA(mark);
 
+                string studentId = txtStudentID.Text.Trim();
+                bool studentExists = false;
+
+                foreach (StudentRecord record in records)
+                {
+                    if (record.StudentID.Equals(
+                        studentId,
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        studentExists = true;
+                        break;
+                    }
+                }
+
+                // Clear old aggregate results when previewing
+                // a student who has no saved records.
+                if (!studentExists)
+                {
+                    txtGPA.Clear();
+                    txtWAM.Clear();
+
+                    lblStudentStatus.Text = "-";
+                    lblStudentStatus.ForeColor = SystemColors.ControlText;
+
+                    dgvStudents.ClearSelection();
+                }
+
                 MessageBox.Show(
                     $"Unit GPA: {unitGPA:0.00}",
                     "GPA Preview",
