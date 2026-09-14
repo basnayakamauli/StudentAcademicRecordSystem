@@ -266,7 +266,7 @@ namespace StudentAcademicRecordSystem
                 studentName,
                 course,
                 unit,
-                mark.ToString("0.00"),
+                mark.ToString("0.##"),
                 unitGPA.ToString("0.00")
             );
 
