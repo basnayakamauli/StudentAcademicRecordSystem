@@ -15,6 +15,7 @@ namespace StudentAcademicRecordSystem
             InitializeComponent();
 
             dgvStudents.MultiSelect = true;
+            dgvStudents.ScrollBars = ScrollBars.Both;
         }
 
         // Designer-linked handlers.

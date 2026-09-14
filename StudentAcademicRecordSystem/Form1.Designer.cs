@@ -304,7 +304,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(996, 1050);
+            ClientSize = new Size(992, 1050);
             Controls.Add(lblStudentStatus);
             Controls.Add(lblStatus);
             Controls.Add(btnSearch);
