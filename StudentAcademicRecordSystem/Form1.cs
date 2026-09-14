@@ -107,7 +107,8 @@ namespace StudentAcademicRecordSystem
             txtWAM.Clear();
 
             lblStudentStatus.Text = "-";
-            lblStudentStatus.ForeColor = SystemColors.ControlText;
+            lblStudentStatus.ForeColor =
+                SystemColors.ControlText;
 
             dgvStudents.ClearSelection();
         }
@@ -164,6 +165,21 @@ namespace StudentAcademicRecordSystem
 
                     return;
                 }
+
+                // Refresh the correct saved results for this student.
+                double overallGPA =
+                    CalculateOverallGPA(studentId);
+
+                double currentWAM =
+                    CalculateWAM(studentId);
+
+                txtGPA.Text =
+                    overallGPA.ToString("0.00");
+
+                txtWAM.Text =
+                    currentWAM.ToString("0.00");
+
+                DisplayStudentStatus(currentWAM);
             }
             else
             {
@@ -171,6 +187,7 @@ namespace StudentAcademicRecordSystem
                 ClearAcademicResults();
             }
 
+            // Validate and preview the current unit mark.
             if (TryGetValidMark(out double mark))
             {
                 double unitGPA = CalculateGPA(mark);
@@ -312,8 +329,11 @@ namespace StudentAcademicRecordSystem
             double currentWAM =
                 CalculateWAM(studentId);
 
-            txtGPA.Text = overallGPA.ToString("0.00");
-            txtWAM.Text = currentWAM.ToString("0.00");
+            txtGPA.Text =
+                overallGPA.ToString("0.00");
+
+            txtWAM.Text =
+                currentWAM.ToString("0.00");
 
             DisplayStudentStatus(currentWAM);
 
@@ -393,8 +413,11 @@ namespace StudentAcademicRecordSystem
             }
 
             // Restore the correct stored student details.
-            txtStudentName.Text = foundRecord.StudentName;
-            txtCourse.Text = foundRecord.Course;
+            txtStudentName.Text =
+                foundRecord.StudentName;
+
+            txtCourse.Text =
+                foundRecord.Course;
 
             txtUnit.Clear();
             txtMarks.Clear();
@@ -405,8 +428,11 @@ namespace StudentAcademicRecordSystem
             double currentWAM =
                 CalculateWAM(studentId);
 
-            txtGPA.Text = overallGPA.ToString("0.00");
-            txtWAM.Text = currentWAM.ToString("0.00");
+            txtGPA.Text =
+                overallGPA.ToString("0.00");
+
+            txtWAM.Text =
+                currentWAM.ToString("0.00");
 
             DisplayStudentStatus(currentWAM);
 
