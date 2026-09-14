@@ -18,8 +18,7 @@ namespace StudentAcademicRecordSystem
             // Allow all matching rows to be highlighted during search.
             dgvStudents.MultiSelect = true;
 
-            // Show scrollbars automatically when records exceed
-            // the visible table area.
+            // Allow scrolling when many records are displayed.
             dgvStudents.ScrollBars = ScrollBars.Both;
         }
 
@@ -101,6 +100,18 @@ namespace StudentAcademicRecordSystem
             }
         }
 
+        // Clear calculated student results.
+        private void ClearAcademicResults()
+        {
+            txtGPA.Clear();
+            txtWAM.Clear();
+
+            lblStudentStatus.Text = "-";
+            lblStudentStatus.ForeColor = SystemColors.ControlText;
+
+            dgvStudents.ClearSelection();
+        }
+
         // Check whether the entered mark is valid.
         private bool TryGetValidMark(out double mark)
         {
@@ -112,37 +123,57 @@ namespace StudentAcademicRecordSystem
         // Preview GPA for the current mark.
         private void btnCalculate_Click(object sender, EventArgs e)
         {
+            string studentId = txtStudentID.Text.Trim();
+            string studentName = txtStudentName.Text.Trim();
+            string course = txtCourse.Text.Trim();
+
+            StudentRecord? existingStudent = null;
+
+            foreach (StudentRecord record in records)
+            {
+                if (record.StudentID.Equals(
+                    studentId,
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    existingStudent = record;
+                    break;
+                }
+            }
+
+            // Existing ID must match the saved student details.
+            if (existingStudent != null)
+            {
+                bool sameName = existingStudent.StudentName.Equals(
+                    studentName,
+                    StringComparison.OrdinalIgnoreCase);
+
+                bool sameCourse = existingStudent.Course.Equals(
+                    course,
+                    StringComparison.OrdinalIgnoreCase);
+
+                if (!sameName || !sameCourse)
+                {
+                    ClearAcademicResults();
+
+                    MessageBox.Show(
+                        "This Student ID already exists with different student details. " +
+                        "Please use the correct Student Name and Course.",
+                        "Student Details Mismatch",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+
+                    return;
+                }
+            }
+            else
+            {
+                // New student should not display another student's results.
+                ClearAcademicResults();
+            }
+
             if (TryGetValidMark(out double mark))
             {
                 double unitGPA = CalculateGPA(mark);
-
-                string studentId = txtStudentID.Text.Trim();
-                bool studentExists = false;
-
-                foreach (StudentRecord record in records)
-                {
-                    if (record.StudentID.Equals(
-                        studentId,
-                        StringComparison.OrdinalIgnoreCase))
-                    {
-                        studentExists = true;
-                        break;
-                    }
-                }
-
-                // Clear old results when calculating for
-                // a student who has no saved records.
-                if (!studentExists)
-                {
-                    txtGPA.Clear();
-                    txtWAM.Clear();
-
-                    lblStudentStatus.Text = "-";
-                    lblStudentStatus.ForeColor =
-                        SystemColors.ControlText;
-
-                    dgvStudents.ClearSelection();
-                }
 
                 MessageBox.Show(
                     $"Unit GPA: {unitGPA:0.00}",
@@ -168,8 +199,7 @@ namespace StudentAcademicRecordSystem
             string course = txtCourse.Text.Trim();
             string unit = txtUnit.Text.Trim();
 
-            // Check whether this Student ID already has saved records.
-            bool studentExists = false;
+            StudentRecord? existingStudent = null;
 
             foreach (StudentRecord record in records)
             {
@@ -177,23 +207,15 @@ namespace StudentAcademicRecordSystem
                     studentId,
                     StringComparison.OrdinalIgnoreCase))
                 {
-                    studentExists = true;
+                    existingStudent = record;
                     break;
                 }
             }
 
-            // If this is a new student, remove the previous
-            // student's GPA, WAM, status and table selection.
-            if (!studentExists)
+            // New student should not display another student's results.
+            if (existingStudent == null)
             {
-                txtGPA.Clear();
-                txtWAM.Clear();
-
-                lblStudentStatus.Text = "-";
-                lblStudentStatus.ForeColor =
-                    SystemColors.ControlText;
-
-                dgvStudents.ClearSelection();
+                ClearAcademicResults();
             }
 
             // Check required fields.
@@ -223,34 +245,29 @@ namespace StudentAcademicRecordSystem
                 return;
             }
 
-            // Keep the same details for an existing Student ID.
-            foreach (StudentRecord existingRecord in records)
+            // Existing Student ID must use the same details.
+            if (existingStudent != null)
             {
-                if (existingRecord.StudentID.Equals(
-                    studentId,
-                    StringComparison.OrdinalIgnoreCase))
+                bool sameName = existingStudent.StudentName.Equals(
+                    studentName,
+                    StringComparison.OrdinalIgnoreCase);
+
+                bool sameCourse = existingStudent.Course.Equals(
+                    course,
+                    StringComparison.OrdinalIgnoreCase);
+
+                if (!sameName || !sameCourse)
                 {
-                    bool sameName =
-                        existingRecord.StudentName.Equals(
-                            studentName,
-                            StringComparison.OrdinalIgnoreCase);
+                    ClearAcademicResults();
 
-                    bool sameCourse =
-                        existingRecord.Course.Equals(
-                            course,
-                            StringComparison.OrdinalIgnoreCase);
+                    MessageBox.Show(
+                        "This Student ID already exists with different student details. " +
+                        "Please use the same Student Name and Course.",
+                        "Student Details Mismatch",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
 
-                    if (!sameName || !sameCourse)
-                    {
-                        MessageBox.Show(
-                            "This Student ID already exists with different student details. " +
-                            "Please use the same Student Name and Course.",
-                            "Student Details Mismatch",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
-
-                        return;
-                    }
+                    return;
                 }
             }
 
@@ -375,11 +392,9 @@ namespace StudentAcademicRecordSystem
                 return;
             }
 
-            txtStudentName.Text =
-                foundRecord.StudentName;
-
-            txtCourse.Text =
-                foundRecord.Course;
+            // Restore the correct stored student details.
+            txtStudentName.Text = foundRecord.StudentName;
+            txtCourse.Text = foundRecord.Course;
 
             txtUnit.Clear();
             txtMarks.Clear();
@@ -390,16 +405,12 @@ namespace StudentAcademicRecordSystem
             double currentWAM =
                 CalculateWAM(studentId);
 
-            txtGPA.Text =
-                overallGPA.ToString("0.00");
-
-            txtWAM.Text =
-                currentWAM.ToString("0.00");
+            txtGPA.Text = overallGPA.ToString("0.00");
+            txtWAM.Text = currentWAM.ToString("0.00");
 
             DisplayStudentStatus(currentWAM);
 
-            // Highlight ALL rows belonging to
-            // the searched student.
+            // Highlight all rows belonging to the searched student.
             dgvStudents.ClearSelection();
 
             DataGridViewRow? firstMatch = null;
