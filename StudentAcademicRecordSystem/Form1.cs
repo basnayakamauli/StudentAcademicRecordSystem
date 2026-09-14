@@ -8,13 +8,18 @@ namespace StudentAcademicRecordSystem
     public partial class Form1 : Form
     {
         // Stores unit records during the current session.
-        private readonly List<StudentRecord> records = new List<StudentRecord>();
+        private readonly List<StudentRecord> records =
+            new List<StudentRecord>();
 
         public Form1()
         {
             InitializeComponent();
 
+            // Allow all matching rows to be highlighted during search.
             dgvStudents.MultiSelect = true;
+
+            // Show scrollbars automatically when records exceed
+            // the visible table area.
             dgvStudents.ScrollBars = ScrollBars.Both;
         }
 
@@ -125,7 +130,7 @@ namespace StudentAcademicRecordSystem
                     }
                 }
 
-                // Clear old aggregate results when previewing
+                // Clear old results when calculating for
                 // a student who has no saved records.
                 if (!studentExists)
                 {
@@ -133,7 +138,8 @@ namespace StudentAcademicRecordSystem
                     txtWAM.Clear();
 
                     lblStudentStatus.Text = "-";
-                    lblStudentStatus.ForeColor = SystemColors.ControlText;
+                    lblStudentStatus.ForeColor =
+                        SystemColors.ControlText;
 
                     dgvStudents.ClearSelection();
                 }
@@ -161,6 +167,34 @@ namespace StudentAcademicRecordSystem
             string studentName = txtStudentName.Text.Trim();
             string course = txtCourse.Text.Trim();
             string unit = txtUnit.Text.Trim();
+
+            // Check whether this Student ID already has saved records.
+            bool studentExists = false;
+
+            foreach (StudentRecord record in records)
+            {
+                if (record.StudentID.Equals(
+                    studentId,
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    studentExists = true;
+                    break;
+                }
+            }
+
+            // If this is a new student, remove the previous
+            // student's GPA, WAM, status and table selection.
+            if (!studentExists)
+            {
+                txtGPA.Clear();
+                txtWAM.Clear();
+
+                lblStudentStatus.Text = "-";
+                lblStudentStatus.ForeColor =
+                    SystemColors.ControlText;
+
+                dgvStudents.ClearSelection();
+            }
 
             // Check required fields.
             if (string.IsNullOrWhiteSpace(studentId) ||
@@ -196,13 +230,15 @@ namespace StudentAcademicRecordSystem
                     studentId,
                     StringComparison.OrdinalIgnoreCase))
                 {
-                    bool sameName = existingRecord.StudentName.Equals(
-                        studentName,
-                        StringComparison.OrdinalIgnoreCase);
+                    bool sameName =
+                        existingRecord.StudentName.Equals(
+                            studentName,
+                            StringComparison.OrdinalIgnoreCase);
 
-                    bool sameCourse = existingRecord.Course.Equals(
-                        course,
-                        StringComparison.OrdinalIgnoreCase);
+                    bool sameCourse =
+                        existingRecord.Course.Equals(
+                            course,
+                            StringComparison.OrdinalIgnoreCase);
 
                     if (!sameName || !sameCourse)
                     {
@@ -253,8 +289,11 @@ namespace StudentAcademicRecordSystem
             // Save the record.
             records.Add(newRecord);
 
-            double overallGPA = CalculateOverallGPA(studentId);
-            double currentWAM = CalculateWAM(studentId);
+            double overallGPA =
+                CalculateOverallGPA(studentId);
+
+            double currentWAM =
+                CalculateWAM(studentId);
 
             txtGPA.Text = overallGPA.ToString("0.00");
             txtWAM.Text = currentWAM.ToString("0.00");
@@ -324,7 +363,8 @@ namespace StudentAcademicRecordSystem
                 txtWAM.Clear();
 
                 lblStudentStatus.Text = "-";
-                lblStudentStatus.ForeColor = SystemColors.ControlText;
+                lblStudentStatus.ForeColor =
+                    SystemColors.ControlText;
 
                 MessageBox.Show(
                     "Student record not found.",
@@ -335,20 +375,31 @@ namespace StudentAcademicRecordSystem
                 return;
             }
 
-            txtStudentName.Text = foundRecord.StudentName;
-            txtCourse.Text = foundRecord.Course;
+            txtStudentName.Text =
+                foundRecord.StudentName;
+
+            txtCourse.Text =
+                foundRecord.Course;
+
             txtUnit.Clear();
             txtMarks.Clear();
 
-            double overallGPA = CalculateOverallGPA(studentId);
-            double currentWAM = CalculateWAM(studentId);
+            double overallGPA =
+                CalculateOverallGPA(studentId);
 
-            txtGPA.Text = overallGPA.ToString("0.00");
-            txtWAM.Text = currentWAM.ToString("0.00");
+            double currentWAM =
+                CalculateWAM(studentId);
+
+            txtGPA.Text =
+                overallGPA.ToString("0.00");
+
+            txtWAM.Text =
+                currentWAM.ToString("0.00");
 
             DisplayStudentStatus(currentWAM);
 
-            // Highlight all rows that belong to the searched student.
+            // Highlight ALL rows belonging to
+            // the searched student.
             dgvStudents.ClearSelection();
 
             DataGridViewRow? firstMatch = null;
@@ -374,11 +425,14 @@ namespace StudentAcademicRecordSystem
                 }
             }
 
-            // Move to the first matching row.
+            // Scroll automatically to the first matching record.
             if (firstMatch != null)
             {
-                dgvStudents.CurrentCell = firstMatch.Cells[0];
-                dgvStudents.FirstDisplayedScrollingRowIndex = firstMatch.Index;
+                dgvStudents.CurrentCell =
+                    firstMatch.Cells[0];
+
+                dgvStudents.FirstDisplayedScrollingRowIndex =
+                    firstMatch.Index;
             }
 
             MessageBox.Show(
@@ -400,7 +454,8 @@ namespace StudentAcademicRecordSystem
             txtWAM.Clear();
 
             lblStudentStatus.Text = "-";
-            lblStudentStatus.ForeColor = SystemColors.ControlText;
+            lblStudentStatus.ForeColor =
+                SystemColors.ControlText;
 
             dgvStudents.ClearSelection();
 
@@ -413,11 +468,15 @@ namespace StudentAcademicRecordSystem
         {
         }
 
-        private void lblStudentID_Click(object sender, EventArgs e)
+        private void lblStudentID_Click(
+            object sender,
+            EventArgs e)
         {
         }
 
-        private void lblStatus_Click(object sender, EventArgs e)
+        private void lblStatus_Click(
+            object sender,
+            EventArgs e)
         {
         }
     }

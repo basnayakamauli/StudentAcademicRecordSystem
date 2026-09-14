@@ -191,7 +191,7 @@
             // 
             // btnAddRecord
             // 
-            btnAddRecord.Location = new Point(58, 650);
+            btnAddRecord.Location = new Point(60, 638);
             btnAddRecord.Name = "btnAddRecord";
             btnAddRecord.Size = new Size(120, 34);
             btnAddRecord.TabIndex = 16;
@@ -201,7 +201,7 @@
             // 
             // btnCalculate
             // 
-            btnCalculate.Location = new Point(250, 650);
+            btnCalculate.Location = new Point(250, 638);
             btnCalculate.Name = "btnCalculate";
             btnCalculate.Size = new Size(112, 34);
             btnCalculate.TabIndex = 17;
@@ -211,7 +211,7 @@
             // 
             // btnClear
             // 
-            btnClear.Location = new Point(704, 650);
+            btnClear.Location = new Point(701, 638);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(112, 34);
             btnClear.TabIndex = 18;
@@ -223,10 +223,10 @@
             // 
             dgvStudents.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvStudents.Columns.AddRange(new DataGridViewColumn[] { StudentID, StudentName, Course, Unit, Marks, GPA });
-            dgvStudents.Location = new Point(38, 714);
+            dgvStudents.Location = new Point(31, 699);
             dgvStudents.Name = "dgvStudents";
             dgvStudents.RowHeadersWidth = 62;
-            dgvStudents.Size = new Size(938, 375);
+            dgvStudents.Size = new Size(926, 348);
             dgvStudents.TabIndex = 19;
             dgvStudents.CellContentClick += dgvStudents_CellContentClick;
             // 
@@ -274,7 +274,7 @@
             // 
             // btnSearch
             // 
-            btnSearch.Location = new Point(445, 650);
+            btnSearch.Location = new Point(445, 638);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(162, 34);
             btnSearch.TabIndex = 20;
