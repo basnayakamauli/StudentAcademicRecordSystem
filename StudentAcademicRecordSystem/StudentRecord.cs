@@ -1,5 +1,6 @@
 ﻿namespace StudentAcademicRecordSystem
 {
+    // Represents one academic unit record for a student.
     public class StudentRecord
     {
         // Student details

@@ -5,24 +5,26 @@ using System.Windows.Forms;
 
 namespace StudentAcademicRecordSystem
 {
+    // Main form that handles the user interface and student record operations.
     public partial class Form1 : Form
     {
-        // Stores unit records during the current session.
+        // Store student records while the application is running.
         private readonly List<StudentRecord> records =
             new List<StudentRecord>();
 
+        // Set up the form and student records table.
         public Form1()
         {
             InitializeComponent();
 
-            // Allow all matching rows to be highlighted during search.
+            // Allow all matching rows to be highlighted during a search.
             dgvStudents.MultiSelect = true;
 
             // Allow scrolling when many records are displayed.
             dgvStudents.ScrollBars = ScrollBars.Both;
         }
 
-        // Designer linked handlers.
+        // Designer-linked handlers.
         private void label2_Click(object sender, EventArgs e) { }
         private void label1_Click(object sender, EventArgs e) { }
         private void label1_Click_1(object sender, EventArgs e) { }
@@ -30,7 +32,7 @@ namespace StudentAcademicRecordSystem
         private void label1_Click_3(object sender, EventArgs e) { }
         private void txtGPA_TextChanged(object sender, EventArgs e) { }
 
-        // Calculate GPA for a one unit.
+        // Calculate the GPA for a unit based on the mark.
         private double CalculateGPA(double mark)
         {
             if (mark >= 80)
@@ -45,7 +47,7 @@ namespace StudentAcademicRecordSystem
                 return 0.0;
         }
 
-        // Calculate overall GPA for one student.
+        // Calculate the student's overall GPA.
         private double CalculateOverallGPA(string studentId)
         {
             double total = 0;
@@ -65,7 +67,7 @@ namespace StudentAcademicRecordSystem
             return count == 0 ? 0 : total / count;
         }
 
-        // Calculate WAM for one student.
+        // Calculate the student's WAM from recorded marks
         private double CalculateWAM(string studentId)
         {
             double total = 0;
@@ -85,7 +87,7 @@ namespace StudentAcademicRecordSystem
             return count == 0 ? 0 : total / count;
         }
 
-        // Display student status based on WAM.
+        // Show the student's current academic status.
         private void DisplayStudentStatus(double wam)
         {
             if (wam >= 50)
@@ -100,7 +102,7 @@ namespace StudentAcademicRecordSystem
             }
         }
 
-        // Clear calculated student results.
+        // Clear the calculated results from the form.
         private void ClearAcademicResults()
         {
             txtGPA.Clear();
@@ -113,7 +115,7 @@ namespace StudentAcademicRecordSystem
             dgvStudents.ClearSelection();
         }
 
-        // Check whether the entered mark is valid.
+        // Check that the entered mark is between 0 and 100.
         private bool TryGetValidMark(out double mark)
         {
             return double.TryParse(txtMarks.Text, out mark) &&
@@ -121,13 +123,14 @@ namespace StudentAcademicRecordSystem
                    mark <= 100;
         }
 
-        // Preview GPA for the current mark.
+        // Preview the GPA for the entered mark.
         private void btnCalculate_Click(object sender, EventArgs e)
         {
             string studentId = txtStudentID.Text.Trim();
             string studentName = txtStudentName.Text.Trim();
             string course = txtCourse.Text.Trim();
 
+            // Check whether this student already exists.
             StudentRecord? existingStudent = null;
 
             foreach (StudentRecord record in records)
@@ -141,7 +144,7 @@ namespace StudentAcademicRecordSystem
                 }
             }
 
-            // Existing ID must match the saved student details.
+            // Make sure the saved student details match.
             if (existingStudent != null)
             {
                 bool sameName = existingStudent.StudentName.Equals(
@@ -166,7 +169,7 @@ namespace StudentAcademicRecordSystem
                     return;
                 }
 
-                // Refresh saved academic results for this student.
+                // Update the student's current GPA and WAM.
                 double overallGPA =
                     CalculateOverallGPA(studentId);
 
@@ -183,11 +186,11 @@ namespace StudentAcademicRecordSystem
             }
             else
             {
-                // New student should not display another student's results.
+                // Clear previous results when entering a new student.
                 ClearAcademicResults();
             }
 
-            // Validate and preview the current unit mark.
+            // Validate the mark and show the unit GPA.
             if (TryGetValidMark(out double mark))
             {
                 double unitGPA = CalculateGPA(mark);
@@ -208,7 +211,7 @@ namespace StudentAcademicRecordSystem
             }
         }
 
-        // Add a unit record.
+        // Add a new unit record for the student.
         private void btnAddRecord_Click(object sender, EventArgs e)
         {
             string studentId = txtStudentID.Text.Trim();
@@ -216,6 +219,7 @@ namespace StudentAcademicRecordSystem
             string course = txtCourse.Text.Trim();
             string unit = txtUnit.Text.Trim();
 
+            // Check whether this student already exists.
             StudentRecord? existingStudent = null;
 
             foreach (StudentRecord record in records)
@@ -229,13 +233,13 @@ namespace StudentAcademicRecordSystem
                 }
             }
 
-            // New student should not display another student's results.
+            // Clear previous results when entering a new student.
             if (existingStudent == null)
             {
                 ClearAcademicResults();
             }
 
-            // Check required fields.
+            // Check that all required fields are completed.
             if (string.IsNullOrWhiteSpace(studentId) ||
                 string.IsNullOrWhiteSpace(studentName) ||
                 string.IsNullOrWhiteSpace(course) ||
@@ -250,7 +254,7 @@ namespace StudentAcademicRecordSystem
                 return;
             }
 
-            // Check mark.
+            // Check that the entered mark is valid.
             if (!TryGetValidMark(out double mark))
             {
                 MessageBox.Show(
@@ -262,7 +266,7 @@ namespace StudentAcademicRecordSystem
                 return;
             }
 
-            // Existing Student ID must use the same details.
+            // Make sure an existing Student ID uses the same details.
             if (existingStudent != null)
             {
                 bool sameName = existingStudent.StudentName.Equals(
@@ -287,7 +291,7 @@ namespace StudentAcademicRecordSystem
                     return;
                 }
 
-                // Refresh correct saved results before any further validation.
+                // Update the student's saved academic results.
                 double existingOverallGPA =
                     CalculateOverallGPA(studentId);
 
@@ -303,7 +307,7 @@ namespace StudentAcademicRecordSystem
                 DisplayStudentStatus(existingWAM);
             }
 
-            // Stop duplicate units for the same student.
+            // Prevent the same unit from being added twice.
             foreach (StudentRecord record in records)
             {
                 if (record.StudentID.Equals(
@@ -325,6 +329,7 @@ namespace StudentAcademicRecordSystem
 
             double unitGPA = CalculateGPA(mark);
 
+            // Create the new student unit record.
             StudentRecord newRecord = new StudentRecord
             {
                 StudentID = studentId,
@@ -335,9 +340,10 @@ namespace StudentAcademicRecordSystem
                 GPA = unitGPA
             };
 
-            // Save the record.
+            // Save the record to the list.
             records.Add(newRecord);
 
+            // Update the student's GPA, WAM and status.
             double overallGPA =
                 CalculateOverallGPA(studentId);
 
@@ -352,7 +358,7 @@ namespace StudentAcademicRecordSystem
 
             DisplayStudentStatus(currentWAM);
 
-            // Add the unit to the table.
+            // Display the new record in the table.
             dgvStudents.Rows.Add(
                 studentId,
                 studentName,
@@ -368,17 +374,18 @@ namespace StudentAcademicRecordSystem
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
 
-            // Keep student details ready for the next unit.
+            // Keep the student details ready for another unit.
             txtUnit.Clear();
             txtMarks.Clear();
             txtUnit.Focus();
         }
 
-        // Search for a student by ID.
+        // Search for a student using the Student ID.
         private void btnSearch_Click(object sender, EventArgs e)
         {
             string studentId = txtStudentID.Text.Trim();
 
+            // Check that a Student ID has been entered.
             if (string.IsNullOrWhiteSpace(studentId))
             {
                 MessageBox.Show(
@@ -390,6 +397,7 @@ namespace StudentAcademicRecordSystem
                 return;
             }
 
+            // Find the matching student record.
             StudentRecord? foundRecord = null;
 
             foreach (StudentRecord record in records)
@@ -403,6 +411,7 @@ namespace StudentAcademicRecordSystem
                 }
             }
 
+            // Clear the results if the student is not found.
             if (foundRecord == null)
             {
                 dgvStudents.ClearSelection();
@@ -427,7 +436,7 @@ namespace StudentAcademicRecordSystem
                 return;
             }
 
-            // Restore the correct stored student details.
+            // Display the stored student details.
             txtStudentName.Text =
                 foundRecord.StudentName;
 
@@ -437,6 +446,7 @@ namespace StudentAcademicRecordSystem
             txtUnit.Clear();
             txtMarks.Clear();
 
+            // Calculate and display the student's results.
             double overallGPA =
                 CalculateOverallGPA(studentId);
 
@@ -451,7 +461,7 @@ namespace StudentAcademicRecordSystem
 
             DisplayStudentStatus(currentWAM);
 
-            // Highlight all rows belonging to the searched student.
+            // Highlight all records belonging to the student.
             dgvStudents.ClearSelection();
 
             DataGridViewRow? firstMatch = null;
@@ -477,7 +487,7 @@ namespace StudentAcademicRecordSystem
                 }
             }
 
-            // Scroll automatically to the first matching record.
+            // Move the table to the first matching record.
             if (firstMatch != null)
             {
                 dgvStudents.CurrentCell =
@@ -494,7 +504,7 @@ namespace StudentAcademicRecordSystem
                 MessageBoxIcon.Information);
         }
 
-        // Clear the form fields.
+        // Clear the form for a new operation.
         private void btnClear_Click(object sender, EventArgs e)
         {
             txtStudentID.Clear();
@@ -514,18 +524,21 @@ namespace StudentAcademicRecordSystem
             txtStudentID.Focus();
         }
 
+        // Designer-linked DataGridView handler.
         private void dgvStudents_CellContentClick(
             object sender,
             DataGridViewCellEventArgs e)
         {
         }
 
+        // Designer-linked label handler.
         private void lblStudentID_Click(
             object sender,
             EventArgs e)
         {
         }
 
+        // Designer-linked status label handler.
         private void lblStatus_Click(
             object sender,
             EventArgs e)
