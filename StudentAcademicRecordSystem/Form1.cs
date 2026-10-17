@@ -1,18 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace StudentAcademicRecordSystem
 {
-    // Main form that handles the user interface and student record operations.
     public partial class Form1 : Form
     {
         // Store student records while the application is running.
         private readonly List<StudentRecord> records =
             new List<StudentRecord>();
 
-        // Set up the form and student records table.
         public Form1()
         {
             InitializeComponent();
@@ -87,7 +88,7 @@ namespace StudentAcademicRecordSystem
             return count == 0 ? 0 : total / count;
         }
 
-        // Show the student's current academic status.
+        // Show the student's current academic status
         private void DisplayStudentStatus(double wam)
         {
             if (wam >= 50)
@@ -144,7 +145,7 @@ namespace StudentAcademicRecordSystem
                 }
             }
 
-            // Make sure the saved student details match.
+            // Make sure the saved student details match
             if (existingStudent != null)
             {
                 bool sameName = existingStudent.StudentName.Equals(
@@ -522,6 +523,94 @@ namespace StudentAcademicRecordSystem
             dgvStudents.ClearSelection();
 
             txtStudentID.Focus();
+        }
+
+        // Put a value inside quotes so commas and quotation marks are saved correctly.
+        private static string EscapeCsv(string value)
+        {
+            // Stop spreadsheet programs from treating entered text as a formula.
+            string trimmed = value.TrimStart();
+            if (trimmed.Length > 0 && "=+-@".IndexOf(trimmed[0]) >= 0)
+            {
+                value = "'" + value;
+            }
+
+            return "\"" + value.Replace("\"", "\"\"") + "\"";
+        }
+
+        // Export the student records to a CSV file selected by the user.
+        private void btnExportCsv_Click(object sender, EventArgs e)
+        {
+            // Check whether there are any records to export.
+            if (records.Count == 0)
+            {
+                MessageBox.Show(
+                    "Please add a student record before exporting.",
+                    "No Records",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                return;
+            }
+
+            // Let the user choose where to save the CSV file.
+            using (SaveFileDialog saveDialog = new SaveFileDialog())
+            {
+                saveDialog.Title = "Export Student Records";
+                saveDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+                saveDialog.DefaultExt = "csv";
+                saveDialog.AddExtension = true;
+                saveDialog.FileName = "StudentAcademicRecords.csv";
+                saveDialog.OverwritePrompt = true;
+
+                if (saveDialog.ShowDialog(this) != DialogResult.OK)
+                    return;
+
+                try
+                {
+                    // UTF-8 with a BOM helps Excel display names correctly.
+                    using (StreamWriter writer = new StreamWriter(
+                        saveDialog.FileName, false, new UTF8Encoding(true)))
+                    {
+                        writer.WriteLine("Student ID,Student Name,Course,Unit,Mark,GPA");
+
+                        // Write each stored unit record as one row in the file.
+                        foreach (StudentRecord record in records)
+                        {
+                            writer.WriteLine(string.Join(",", new string[]
+                            {
+                                EscapeCsv(record.StudentID),
+                                EscapeCsv(record.StudentName),
+                                EscapeCsv(record.Course),
+                                EscapeCsv(record.Unit),
+                                record.Mark.ToString("0.##", CultureInfo.InvariantCulture),
+                                record.GPA.ToString("0.00", CultureInfo.InvariantCulture)
+                            }));
+                        }
+                    }
+
+                    MessageBox.Show(
+                        "Student records exported successfully!",
+                        "Export Complete",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    MessageBox.Show(
+                        "You do not have permission to save the file in this location.",
+                        "Export Failed",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+                catch (IOException ex)
+                {
+                    MessageBox.Show(
+                        "The CSV file could not be saved: " + ex.Message,
+                        "Export Failed",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
         }
 
         // Designer-linked DataGridView handler.

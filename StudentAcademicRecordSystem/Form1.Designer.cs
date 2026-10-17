@@ -56,6 +56,7 @@
             btnSearch = new Button();
             lblStatus = new Label();
             lblStudentStatus = new Label();
+            btnExportCsv = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvStudents).BeginInit();
             SuspendLayout();
             // 
@@ -201,7 +202,7 @@
             // 
             // btnCalculate
             // 
-            btnCalculate.Location = new Point(250, 638);
+            btnCalculate.Location = new Point(224, 638);
             btnCalculate.Name = "btnCalculate";
             btnCalculate.Size = new Size(112, 34);
             btnCalculate.TabIndex = 17;
@@ -211,7 +212,7 @@
             // 
             // btnClear
             // 
-            btnClear.Location = new Point(701, 638);
+            btnClear.Location = new Point(600, 638);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(112, 34);
             btnClear.TabIndex = 18;
@@ -274,7 +275,7 @@
             // 
             // btnSearch
             // 
-            btnSearch.Location = new Point(445, 638);
+            btnSearch.Location = new Point(381, 638);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(162, 34);
             btnSearch.TabIndex = 20;
@@ -300,11 +301,22 @@
             lblStudentStatus.Size = new Size(0, 25);
             lblStudentStatus.TabIndex = 23;
             // 
+            // btnExportCsv
+            // 
+            btnExportCsv.Location = new Point(771, 638);
+            btnExportCsv.Name = "btnExportCsv";
+            btnExportCsv.Size = new Size(112, 34);
+            btnExportCsv.TabIndex = 24;
+            btnExportCsv.Text = "Export CSV";
+            btnExportCsv.UseVisualStyleBackColor = true;
+            btnExportCsv.Click += btnExportCsv_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(992, 1050);
+            Controls.Add(btnExportCsv);
             Controls.Add(lblStudentStatus);
             Controls.Add(lblStatus);
             Controls.Add(btnSearch);
@@ -363,5 +375,6 @@
         private Button btnSearch;
         private Label lblStatus;
         private Label lblStudentStatus;
+        private Button btnExportCsv;
     }
 }
