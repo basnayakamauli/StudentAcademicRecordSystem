@@ -567,13 +567,13 @@ namespace StudentAcademicRecordSystem
 
                 try
                 {
-                    // UTF-8 with a BOM helps Excel display names correctly.
+                    // Save the CSV file in a format that Excel can read correctly.
                     using (StreamWriter writer = new StreamWriter(
                         saveDialog.FileName, false, new UTF8Encoding(true)))
                     {
                         writer.WriteLine("Student ID,Student Name,Course,Unit,Mark,GPA");
 
-                        // Write each stored unit record as one row in the file.
+                        // Add each student record to the CSV file.
                         foreach (StudentRecord record in records)
                         {
                             writer.WriteLine(string.Join(",", new string[]
