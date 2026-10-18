@@ -525,10 +525,10 @@ namespace StudentAcademicRecordSystem
             txtStudentID.Focus();
         }
 
-        // Put a value inside quotes so commas and quotation marks are saved correctly.
+        // Prepare the text before saving it to the CSV file.
         private static string EscapeCsv(string value)
         {
-            // Stop spreadsheet programs from treating entered text as a formula.
+            // Prevent Excel from reading some text as a formula.
             string trimmed = value.TrimStart();
             if (trimmed.Length > 0 && "=+-@".IndexOf(trimmed[0]) >= 0)
             {
@@ -538,7 +538,7 @@ namespace StudentAcademicRecordSystem
             return "\"" + value.Replace("\"", "\"\"") + "\"";
         }
 
-        // Export the student records to a CSV file selected by the user.
+        // Handle commas and quotation marks in the text.
         private void btnExportCsv_Click(object sender, EventArgs e)
         {
             // Check whether there are any records to export.
